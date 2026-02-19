@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: wedding-rsvp-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        fromService:
+          type: web
+          name: wedding-rsvp-api
+          property: port
+      - key: MONGO_URL
+        sync: false # This will be set manually in Render dashboard
+      - key: FRONTEND_URL
+        sync: false # This will be set manually in Render dashboard
