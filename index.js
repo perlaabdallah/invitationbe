@@ -59,7 +59,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));
 
   // Catch all handler for React Router
-  app.get("/*", (req, res) => {
+app.get("/:path*", (req, res) => {
     res.sendFile(path.join(__dirname, "../client/build", "index.html"));
   });
 }
