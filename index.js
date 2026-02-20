@@ -28,7 +28,8 @@ const corsOptions = {
       ? [
           process.env.FRONTEND_URL,
           "https://fourthdraftfourth.netlify.app/", // Replace with your actual frontend URL
-          "https://your-app-name.vercel.app",  // If using Vercel
+          "https://your-app-name.vercel.app",
+          "http://localhost:3000",// If using Vercel
         ]
       : ["http://localhost:3000", "http://localhost:3001"],
   credentials: true,
