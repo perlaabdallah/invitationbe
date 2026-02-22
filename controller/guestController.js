@@ -20,7 +20,7 @@ export const getGuestsByGuestID = async (req, res) => {
     const guestId = req.params.id;
     const guestData = await Guest.find({ guestId });
     if (!guestData || guestData.length === 0) {
-      res.status(404).json({ errorMessage: "Guest data not found." });
+      return res.status(404).json({ errorMessage: "Guest data not found." });
     }
     return res.status(200).json(guestData);
   } catch (error) {
@@ -32,7 +32,7 @@ export const getAllGuests = async (req, res) => {
   try {
     const guestData = await Guest.find();
     if (!guestData || guestData.length === 0) {
-      res.status(404).json({ errorMessage: "Guest data not found." });
+      return res.status(404).json({ errorMessage: "Guest data not found." });
     }
     return res.status(200).json(guestData);
   } catch (error) {
@@ -44,8 +44,8 @@ export const updateGuestById = async (req, res) => {
   try {
     const id = req.params.id;
     const guestData = await Guest.findById(id);
-    if (!guestData || guestData.length === 0) {
-      res.status(404).json({ errorMessage: "Guest data not found." });
+    if (!guestData) {
+      return res.status(404).json({ errorMessage: "Guest data not found." });
     }
     const updatedData = await Guest.findByIdAndUpdate(id, req.body, {
       new: true,
@@ -60,8 +60,8 @@ export const deleteGuestById = async (req, res) => {
   try {
     const id = req.params.id;
     const guestData = await Guest.findById(id);
-    if (!guestData || guestData.length === 0) {
-      res.status(404).json({ errorMessage: "Guest data not found." });
+    if (!guestData) {
+      return res.status(404).json({ errorMessage: "Guest data not found." });
     }
     await Guest.findByIdAndDelete(id);
     return res.status(200).json({ message: "Guest deleted successfully" });
@@ -75,7 +75,7 @@ export const deleteGuestByGuestId = async (req, res) => {
     const guestId = req.params.guestId;
     const guestData = await Guest.find({ guestId });
     if (!guestData || guestData.length === 0) {
-      res.status(404).json({ errorMessage: "Guest data not found." });
+      return res.status(404).json({ errorMessage: "Guest data not found." });
     }
     await Guest.deleteMany({ guestId });
     return res.status(200).json({ message: "Guests deleted successfully" });

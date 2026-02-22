@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 const familySchema = new mongoose.Schema({
   familyId: {
     type: String,
     required: true,
     unique: true,
+    default: uuidv4,
   },
   attendees: [
     {
@@ -25,7 +27,10 @@ const familySchema = new mongoose.Schema({
   giftRegistry: {
     type: Boolean,
     required: false,
+    default: false,
   },
+}, {
+  timestamps: true, // Adds createdAt and updatedAt fields
 });
 
 export default mongoose.model("Family", familySchema);

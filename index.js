@@ -50,6 +50,41 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Debug endpoint to check database connection
+app.get("/debug", async (req, res) => {
+  try {
+    const dbState = mongoose.connection.readyState;
+    const dbStates = {
+      0: 'disconnected',
+      1: 'connected',
+      2: 'connecting',
+      3: 'disconnecting'
+    };
+    
+    // Try to count documents
+    const Family = mongoose.model('Family');
+    const familyCount = await Family.countDocuments();
+    const allFamilies = await Family.find().limit(5);
+    
+    res.status(200).json({
+      database: {
+        state: dbStates[dbState],
+        name: mongoose.connection.name,
+        host: mongoose.connection.host,
+        familyCount,
+        sampleFamilies: allFamilies
+      }
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+      database: {
+        state: mongoose.connection.readyState
+      }
+    });
+  }
+});
+
 // API Routes
 app.use("/api", route);
 app.use("/api/family", familyRoute);
@@ -59,6 +94,14 @@ if (process.env.NODE_ENV === "production") {
   // Serve static files from React build
   app.use(express.static(path.join(__dirname, "../client/build")));
 
+  // Catch all handler for React Router - using app.use instead of app.get
+  app.use((req, res) => {
+    // Only serve index.html for GET requests that aren't API routes
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+    } else {
+      res.status(404).json({ message: "Route not found" });
+    }
   // Catch all handler for React Router - using app.use instead of app.get
   app.use((req, res) => {
     // Only serve index.html for GET requests that aren't API routes
@@ -79,17 +122,11 @@ app.use((err, req, res, next) => {
   });
 });
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ message: "Route not found" });
-});
+// Note: 404 handler is now integrated into the catch-all handler above
 
 // Database connection and server start
 mongoose
-  .connect(MONGOURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(MONGOURL)
   .then(() => {
     console.log("✅ Database connected successfully");
     console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
