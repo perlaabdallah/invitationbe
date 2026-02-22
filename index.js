@@ -102,14 +102,6 @@ if (process.env.NODE_ENV === "production") {
     } else {
       res.status(404).json({ message: "Route not found" });
     }
-  // Catch all handler for React Router - using app.use instead of app.get
-  app.use((req, res) => {
-    // Only serve index.html for GET requests that aren't API routes
-    if (req.method === 'GET' && !req.path.startsWith('/api')) {
-      res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-    } else {
-      res.status(404).json({ message: "Route not found" });
-    }
   });
 }
 
