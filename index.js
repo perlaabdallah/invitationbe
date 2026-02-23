@@ -21,20 +21,43 @@ const app = express();
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
-// CORS configuration for production
+// CORS configuration for production and development
+const allowedOrigins = [
+  // Always allow localhost for development
+  "http://localhost:3000", 
+  "http://localhost:3001",
+  // Production URLs
+  process.env.FRONTEND_URL,
+  "https://fourthdraftfourth.netlify.app/", // Replace with your actual frontend URL
+  "https://your-app-name.vercel.app",  // If using Vercel
+].filter(Boolean); // Remove any undefined values
+
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? [
-          process.env.FRONTEND_URL,
-          "https://fourthdraftfourth.netlify.app/", // Replace with your actual frontend URL
-          "https://your-app-name.vercel.app",
-          "http://localhost:3000",// If using Vercel
-        ]
-      : ["http://localhost:3000", "http://localhost:3001"],
+  origin: function (origin, callback) {
+    console.log("🔍 CORS Request from origin:", origin);
+    console.log("📋 Allowed origins:", allowedOrigins);
+    
+    // Allow requests with no origin (mobile apps, postman, etc.)
+    if (!origin) {
+      console.log("✅ No origin - allowing request");
+      return callback(null, true);
+    }
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log("✅ Origin allowed:", origin);
+      callback(null, true);
+    } else {
+      console.log("❌ Origin blocked:", origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
+
+console.log("🔧 CORS Allowed Origins:", allowedOrigins);
+console.log("🌍 NODE_ENV:", process.env.NODE_ENV);
+console.log("🎯 FRONTEND_URL:", process.env.FRONTEND_URL);
 app.use(cors(corsOptions));
 
 const PORT = process.env.PORT || 8000;
