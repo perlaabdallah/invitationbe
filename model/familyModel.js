@@ -1,13 +1,6 @@
 import mongoose from "mongoose";
-import { v4 as uuidv4 } from "uuid";
 
 const familySchema = new mongoose.Schema({
-  familyId: {
-    type: String,
-    required: true,
-    unique: true,
-    default: uuidv4,
-  },
   attendees: [
     {
       guestId: {
