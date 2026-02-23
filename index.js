@@ -50,41 +50,6 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Debug endpoint to check database connection
-app.get("/debug", async (req, res) => {
-  try {
-    const dbState = mongoose.connection.readyState;
-    const dbStates = {
-      0: 'disconnected',
-      1: 'connected',
-      2: 'connecting',
-      3: 'disconnecting'
-    };
-    
-    // Try to count documents
-    const Family = mongoose.model('Family');
-    const familyCount = await Family.countDocuments();
-    const allFamilies = await Family.find().limit(5);
-    
-    res.status(200).json({
-      database: {
-        state: dbStates[dbState],
-        name: mongoose.connection.name,
-        host: mongoose.connection.host,
-        familyCount,
-        sampleFamilies: allFamilies
-      }
-    });
-  } catch (error) {
-    res.status(500).json({
-      error: error.message,
-      database: {
-        state: mongoose.connection.readyState
-      }
-    });
-  }
-});
-
 // API Routes
 app.use("/api", route);
 app.use("/api/family", familyRoute);
