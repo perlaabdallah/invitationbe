@@ -20,7 +20,7 @@ const familySchema = new mongoose.Schema({
   giftRegistry: {
     type: Boolean,
     required: false,
-    default: false,
+    default: true,
   },
 }, {
   timestamps: true, // Adds createdAt and updatedAt fields
