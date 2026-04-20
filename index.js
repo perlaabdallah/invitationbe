@@ -24,15 +24,13 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 // CORS configuration for production and development
 const allowedOrigins = [
-  // Always allow localhost for development
   "http://localhost:3000",
   "http://localhost:3001",
-  // Production URLs
   process.env.FRONTEND_URL,
-  "https://anthony-and-perla.sparklink.cards/",
-  "https://anthony-and-perla.netlify.app/", // Replace with your actual frontend URL
-  "https://your-app-name.vercel.app", // If using Vercel
-].filter(Boolean); // Remove any undefined values
+  "https://anthony-and-perla.sparklink.cards",
+  "https://anthony-and-perla.netlify.app",
+  "https://your-app-name.vercel.app",
+].filter(Boolean);
 
 const corsOptions = {
   origin: function (origin, callback) {
