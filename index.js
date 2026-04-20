@@ -29,6 +29,7 @@ const allowedOrigins = [
   "http://localhost:3001",
   // Production URLs
   process.env.FRONTEND_URL,
+  "https://anthony-and-perla.sparklink.cards/",
   "https://anthony-and-perla.netlify.app/", // Replace with your actual frontend URL
   "https://your-app-name.vercel.app", // If using Vercel
 ].filter(Boolean); // Remove any undefined values
