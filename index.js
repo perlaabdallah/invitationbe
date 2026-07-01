@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import path from "path";
 import { fileURLToPath } from "url";
 import adminRoute from "./routes/adminRoute.js";
+import expenseRoute from "./routes/expenseRoute.js";
 import familyRoute from "./routes/familyRoute.js";
 import route from "./routes/guestRoute.js";
 
@@ -77,6 +78,7 @@ app.get("/health", (req, res) => {
 app.use("/api", route);
 app.use("/api/family", familyRoute);
 app.use("/api/admin", adminRoute);
+app.use("/api/fin", expenseRoute);
 
 // Serve static files in production
 if (process.env.NODE_ENV === "production") {
